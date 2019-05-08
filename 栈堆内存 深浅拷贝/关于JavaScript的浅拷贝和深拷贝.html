@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="referrer" content="origin" />
+    <title>关于JavaScript的浅拷贝和深拷贝 - chenxj - 博客园</title>
+<meta property="og:description" content="在&#160;JS&#160;中有一些基本类型像是Number、String、Boolean，而对象就是像这样的东西{&#160;name:&#160;&#39;Larry&#39;,&#160;sk" />
+    <link type="text/css" rel="stylesheet" href="/bundles/blog-common.css?v=svlZeZMvc3He7PqOD4T7SOuQn0_kIfLBYiy3idqd35Y1"/>
+<link id="MainCss" type="text/css" rel="stylesheet" href="/skins/BlackLowKey/bundle-BlackLowKey.css?v=porUb1GRMsPCuLZTJKjoDyrJre6Y7-Oiq-zx-_VcGG81"/>
+<link type="text/css" rel="stylesheet" href="/blog/customcss/298457.css?v=HuzLF6LbcDb3el75bdHJV1mVT6k%3d"/>
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/BlackLowKey/bundle-BlackLowKey-mobile.css?v=Go8Bj0ZU9gZXuPSKWcSQabps3E1njgJKYz4DiOq6-N41"/>
+    <link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/Chen-XiaoJun/rss"/>
+    <link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/Chen-XiaoJun/rsd.xml"/>
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/Chen-XiaoJun/wlwmanifest.xml"/>
+    <script src="//common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script>var currentBlogId=298457;var currentBlogApp='Chen-XiaoJun',cb_enable_mathjax=false;var isLogined=false;</script>
+    <script src="/bundles/blog-common.js?v=OFBZTzkHKauV7mtIFLF9jlqrX-sesK9-mY9KjurLrq01" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="https://www.cnblogs.com/Chen-XiaoJun/"><img id="blogLogo" src="/Skins/custom/images/logo.gif" alt="返回主页" /></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/Chen-XiaoJun/">chenxj</a></h1>
+<h2>走在前端路上。。。。。。</h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/Chen-XiaoJun/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/chenxj">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/Chen-XiaoJun/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="https://www.cnblogs.com/Chen-XiaoJun/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 96&nbsp; </span>
+<span id="stats_article_count">文章 - 135&nbsp; </span>
+<span id="stats-comment_count">评论 - 31</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+        <div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class = "post">
+		<h1 class = "postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/Chen-XiaoJun/p/6217373.html">关于JavaScript的浅拷贝和深拷贝</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><p>在&nbsp;JS&nbsp;中有一些基本类型像是<code>Number</code>、<code>String</code>、<code>Boolean，</code>而对象就是像这样的东西{&nbsp;name:&nbsp;'Larry',&nbsp;skill:&nbsp;'Node.js'&nbsp;}，对象跟基本类型最大的不同就在于他们的传值方式。</p>
+<p>基本类型是按值传递，像是这样：在修改<code>a</code>时并不会改到<code>b</code></p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">var</span> a = <span style="color: #800080;">25</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">var</span> b =<span style="color: #000000;"> a;
+b </span>= <span style="color: #800080;">18</span><span style="color: #000000;">;
+console.log(a);</span><span style="color: #008000;">//</span><span style="color: #008000;">25</span>
+console.log(b);<span style="color: #008000;">//</span><span style="color: #008000;">18</span></pre>
+</div>
+<p>但对象就不同，对象传的是按引用传值：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">var</span> obj1 = { a: <span style="color: #800080;">10</span>, b: <span style="color: #800080;">20</span>, c: <span style="color: #800080;">30</span><span style="color: #000000;"> };
+</span><span style="color: #0000ff;">var</span> obj2 =<span style="color: #000000;"> obj1;
+obj2.b </span>= <span style="color: #800080;">100</span><span style="color: #000000;">;
+console.log(obj1);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> { a: 10, b: 100, c: 30 } &lt;-- b 被改到了</span>
+<span style="color: #000000;">console.log(obj2);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> { a: 10, b: 100, c: 30 }</span></pre>
+</div>
+<p>复制一份<code>obj1</code>叫做<code>obj2，</code>然后把<code>obj2.b</code>改成<code>100，</code>但却不小心改到<code>obj1.b，</code>因为他们根本是同一个对象，这就是所谓的浅拷贝。</p>
+<p>要避免这样的错误发生就要写成这样：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">var</span> obj1 = { a: <span style="color: #800080;">10</span>, b: <span style="color: #800080;">20</span>, c: <span style="color: #800080;">30</span><span style="color: #000000;"> };
+</span><span style="color: #0000ff;">var</span> obj2 =<span style="color: #000000;"> { a: obj1.a, b: obj1.b, c: obj1.c };
+obj2.b </span>= <span style="color: #800080;">100</span><span style="color: #000000;">;
+console.log(obj1);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> { a: 10, b: 20, c: 30 } &lt;-- b 沒被改到</span>
+<span style="color: #000000;">console.log(obj2);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> { a: 10, b: 100, c: 30 }</span></pre>
+</div>
+<p>这样就是深拷贝，不会改到原本的<code>obj1。</code></p>
+<h2><strong>浅拷贝(Shallow Copy) VS&nbsp;深拷贝(Deep Copy)</strong></h2>
+<p><img src="https://images2015.cnblogs.com/blog/1005354/201612/1005354-20161224162558589-31982395.png" alt="" /></p>
+<p>浅拷贝只复制指向某个对象的指针，而不复制对象本身，新旧对象还是共享同一块内存。但深拷贝会另外创造一个一模一样的对象，新对象跟原对象不共享内存，修改新对象不会改到原对象。</p>
+<h2>浅拷贝的实现方式</h2>
+<p>也就是简单地复制而已</p>
+<p><strong>1、简单地复制语句</strong></p>
+<div class="cnblogs_code">
+<pre>  &lt;script type=<span style="color: #800000;">"</span><span style="color: #800000;">text/javascript</span><span style="color: #800000;">"</span>&gt;<span style="color: #000000;">
+    function simpleClone(initalObj) {    
+      </span><span style="color: #0000ff;">var</span> obj =<span style="color: #000000;"> {};    
+      </span><span style="color: #0000ff;">for</span> ( <span style="color: #0000ff;">var</span> i <span style="color: #0000ff;">in</span><span style="color: #000000;"> initalObj) {
+        obj[i] </span>=<span style="color: #000000;"> initalObj[i];
+      }    
+      </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> obj;
+    }
+
+    </span><span style="color: #0000ff;">var</span> obj =<span style="color: #000000;"> {
+      a: </span><span style="color: #800000;">"</span><span style="color: #800000;">hello</span><span style="color: #800000;">"</span><span style="color: #000000;">,
+      b:{
+          a: </span><span style="color: #800000;">"</span><span style="color: #800000;">world</span><span style="color: #800000;">"</span><span style="color: #000000;">,
+          b: </span><span style="color: #800080;">21</span><span style="color: #000000;">
+        },
+      c:[</span><span style="color: #800000;">"</span><span style="color: #800000;">Bob</span><span style="color: #800000;">"</span>, <span style="color: #800000;">"</span><span style="color: #800000;">Tom</span><span style="color: #800000;">"</span>, <span style="color: #800000;">"</span><span style="color: #800000;">Jenny</span><span style="color: #800000;">"</span><span style="color: #000000;">],
+      d:function() {
+          alert(</span><span style="color: #800000;">"</span><span style="color: #800000;">hello world</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+        }
+    }
+    </span><span style="color: #0000ff;">var</span> cloneObj =<span style="color: #000000;"> simpleClone(obj); 
+    console.log(cloneObj.b); 
+    console.log(cloneObj.c);
+    console.log(cloneObj.d);
+
+    cloneObj.b.a </span>= <span style="color: #800000;">"</span><span style="color: #800000;">changed</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+    cloneObj.c </span>= [<span style="color: #800080;">1</span>, <span style="color: #800080;">2</span>, <span style="color: #800080;">3</span><span style="color: #000000;">];
+    cloneObj.d </span>= function() { alert(<span style="color: #800000;">"</span><span style="color: #800000;">changed</span><span style="color: #800000;">"</span><span style="color: #000000;">); };
+    console.log(obj.b);
+    console.log(obj.c);
+    console.log(obj.d);
+  </span>&lt;/script&gt;</pre>
+</div>
+<p>结果为：</p>
+<p><img src="https://images2015.cnblogs.com/blog/1005354/201612/1005354-20161224190116948-1910786829.png" alt="" /></p>
+<p><strong>2、Object.assign()</strong></p>
+<p><code><code>Object.assign</code>是ES6的新函数。Object.assign()</code>&nbsp;方法可以把任意多个的源对象自身的可枚举属性拷贝给目标对象，然后返回目标对象。但是&nbsp;<code>Object.assign()</code>&nbsp;进行的是浅拷贝，拷贝的是对象的属性的引用，而不是对象本身。</p>
+<div class="cnblogs_code">
+<pre>Object.assign(target, ...sources)</pre>
+</div>
+<p>参数：</p>
+<p>target：目标对象。<br />sources：任意多个源对象。<br />返回值：<span style="line-height: 1.5;">目标对象会被返回。</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">var</span> obj = { a: {a: <span style="color: #800000;">"</span><span style="color: #800000;">hello</span><span style="color: #800000;">"</span>, b: <span style="color: #800080;">21</span><span style="color: #000000;">} };
+</span><span style="color: #0000ff;">var</span> initalObj =<span style="color: #000000;"> Object.assign({}, obj);
+
+initalObj.a.a </span>= <span style="color: #800000;">"</span><span style="color: #800000;">changed</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+console.log(obj.a.a); </span><span style="color: #008000;">//</span><span style="color: #008000;"> "changed"</span></pre>
+</div>
+<p>兼容性：</p>
+<p><img src="https://images2015.cnblogs.com/blog/1005354/201612/1005354-20161224191033073-361561669.png" alt="" /></p>
+<p>需要注意的是：</p>
+<pre>Object.assign()可以处理一层的深度拷贝，如下：</pre>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">var</span> obj1 = { a: <span style="color: #800080;">10</span>, b: <span style="color: #800080;">20</span>, c: <span style="color: #800080;">30</span><span style="color: #000000;"> };
+</span><span style="color: #0000ff;">var</span> obj2 =<span style="color: #000000;"> Object.assign({}, obj1);
+obj2.b </span>= <span style="color: #800080;">100</span><span style="color: #000000;">;
+console.log(obj1);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> { a: 10, b: 20, c: 30 } &lt;-- 沒被改到</span>
+<span style="color: #000000;">console.log(obj2);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> { a: 10, b: 100, c: 30 }</span></pre>
+</div>
+<h2>深拷贝的实现方式</h2>
+<p>要完全复制又不能修改到原对象，这时候就要用&nbsp;Deep Copy，这里会介绍几种Deep Copy&nbsp;的方式。</p>
+<p><strong>1、手动复制</strong></p>
+<p>把一个对象的属性复制给另一个对象的属性</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">var</span> obj1 = { a: <span style="color: #800080;">10</span>, b: <span style="color: #800080;">20</span>, c: <span style="color: #800080;">30</span><span style="color: #000000;"> };
+</span><span style="color: #0000ff;">var</span> obj2 =<span style="color: #000000;"> { a: obj1.a, b: obj1.b, c: obj1.c };
+obj2.b </span>= <span style="color: #800080;">100</span><span style="color: #000000;">;
+console.log(obj1);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> { a: 10, b: 20, c: 30 } &lt;-- 沒被改到</span>
+<span style="color: #000000;">console.log(obj2);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> { a: 10, b: 100, c: 30 }</span></pre>
+</div>
+<p>但这样很麻烦，要一个一个自己复制；而且这样的本质也不能算是 Deep Copy，因为对象里面也可能回事对象，如像下面这个状况：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">var</span> obj1 = { body: { a: <span style="color: #800080;">10</span><span style="color: #000000;"> } };
+</span><span style="color: #0000ff;">var</span> obj2 =<span style="color: #000000;"> { body: obj1.body };
+obj2.body.a </span>= <span style="color: #800080;">20</span><span style="color: #000000;">;
+console.log(obj1);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> { body: { a: 20 } } &lt;-- 被改到了</span>
+<span style="color: #000000;">console.log(obj2);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> { body: { a: 20 } }</span>
+console.log(obj1 ===<span style="color: #000000;"> obj2);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> false</span>
+console.log(obj1.body ===<span style="color: #000000;"> obj2.body);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> true</span></pre>
+</div>
+<p>虽然<code>obj1</code>跟<code>obj2</code>是不同对象，但他们会共享同一个<code>obj1.body</code><code>，</code>所以修改<code>obj2.body.a</code>时也会修改到旧的。</p>
+<p><strong>2、对象只有一层的话可以使用上面的：<code class=" language-js">Object<span class="token punctuation">.<span class="token function">assign()函数</span></span></code></strong></p>
+<p><span class="token punctuation"><span class="token function"><code>Object.assign({}, obj1)</code>的意思是先建立一个空对象{}，接着把<code>obj1</code>中所有的属性复制过去，所以<code>obj2</code>会长得跟<code>obj1</code>一样，这时候再修改<code>obj2.b</code>也不会影响<code>obj1。</code><br /><br />因为<code>Object.assign</code>跟我们手动复制的效果相同，所以一样只能处理深度只有一层的对象，没办法做到真正的&nbsp;Deep Copy。不过如果要复制的对象只有一层的话可以考虑使用它。</span></span></p>
+<p><strong><span class="token punctuation"><span class="token function">3、</span></span>转成&nbsp;JSON&nbsp;再转回来</strong></p>
+<p><span class="token punctuation"><span class="token function">用<code>JSON.stringify</code>把对象转成字符串，再用<code>JSON.parse</code>把字符串转成新的对象。</span></span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">var</span> obj1 = { body: { a: <span style="color: #800080;">10</span><span style="color: #000000;"> } };
+</span><span style="color: #0000ff;">var</span> obj2 =<span style="color: #000000;"> JSON.parse(JSON.stringify(obj1));
+obj2.body.a </span>= <span style="color: #800080;">20</span><span style="color: #000000;">;
+console.log(obj1);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> { body: { a: 10 } } &lt;-- 沒被改到</span>
+<span style="color: #000000;">console.log(obj2);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> { body: { a: 20 } }</span>
+console.log(obj1 ===<span style="color: #000000;"> obj2);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> false</span>
+console.log(obj1.body ===<span style="color: #000000;"> obj2.body);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> false</span></pre>
+</div>
+<p>这样做是真正的Deep Copy，<span style="line-height: 1.5;">这种方法简单易用。</span></p>
+<p>但是这种方法也有不少坏处，譬如它会抛弃对象的constructor。也就是深拷贝之后，不管这个对象原来的构造函数是什么，在深拷贝之后都会变成Object。</p>
+<p>这种方法能正确处理的对象只有&nbsp;<code>Number, String, Boolean, Array, 扁平对象</code>，即那些能够被 json 直接表示的数据结构。RegExp对象是无法通过这种方式深拷贝。</p>
+<p>也就是说，只有可以转成<code>JSON</code>格式的对象才可以这样用，像<code>function</code>没办法转成<code>JSON。</code></p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">var</span> obj1 = { fun: function(){ console.log(<span style="color: #800080;">123</span><span style="color: #000000;">) } };
+</span><span style="color: #0000ff;">var</span> obj2 =<span style="color: #000000;"> JSON.parse(JSON.stringify(obj1));
+console.log(</span><span style="color: #0000ff;">typeof</span><span style="color: #000000;"> obj1.fun);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> 'function'</span>
+console.log(<span style="color: #0000ff;">typeof</span><span style="color: #000000;"> obj2.fun);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> 'undefined' &lt;-- 没复制</span></pre>
+</div>
+<p>要复制的<code>function</code>会直接消失，所以这个方法只能用在单纯只有数据的对象。</p>
+<p><strong>4、递归拷贝</strong></p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">function deepClone(initalObj, finalObj) {    
+  </span><span style="color: #0000ff;">var</span> obj = finalObj ||<span style="color: #000000;"> {};    
+  </span><span style="color: #0000ff;">for</span> (<span style="color: #0000ff;">var</span> i <span style="color: #0000ff;">in</span><span style="color: #000000;"> initalObj) {        
+    </span><span style="color: #0000ff;">if</span> (<span style="color: #0000ff;">typeof</span> initalObj[i] === <span style="color: #800000;">'</span><span style="color: #800000;">object</span><span style="color: #800000;">'</span><span style="color: #000000;">) {
+      obj[i] </span>= (initalObj[i].constructor === Array) ?<span style="color: #000000;"> [] : {};            
+      arguments.callee(initalObj[i], obj[i]);
+    } </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+      obj[i] </span>=<span style="color: #000000;"> initalObj[i];
+    }
+  }    
+  </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> obj;
+}
+</span><span style="color: #0000ff;">var</span> str =<span style="color: #000000;"> {};
+</span><span style="color: #0000ff;">var</span> obj = { a: {a: <span style="color: #800000;">"</span><span style="color: #800000;">hello</span><span style="color: #800000;">"</span>, b: <span style="color: #800080;">21</span><span style="color: #000000;">} };
+deepClone(obj, str);
+console.log(str.a);</span></pre>
+</div>
+<p>上述代码确实可以实现深拷贝。但是当遇到两个互相引用的对象，会出现死循环的情况。</p>
+<p>为了避免相互引用的对象导致死循环的情况，则应该在遍历的时候判断是否相互引用对象，如果是则退出循环。</p>
+<p>改进版代码如下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">function deepClone(initalObj, finalObj) {    
+  </span><span style="color: #0000ff;">var</span> obj = finalObj ||<span style="color: #000000;"> {};    
+  </span><span style="color: #0000ff;">for</span> (<span style="color: #0000ff;">var</span> i <span style="color: #0000ff;">in</span><span style="color: #000000;"> initalObj) {        
+    </span><span style="color: #0000ff;">var</span> prop = initalObj[i];        <span style="color: #008000;">//</span><span style="color: #008000;"> 避免相互引用对象导致死循环，如initalObj.a = initalObj的情况</span>
+    <span style="color: #0000ff;">if</span>(prop ===<span style="color: #000000;"> obj) {            
+      </span><span style="color: #0000ff;">continue</span><span style="color: #000000;">;
+    }        
+    </span><span style="color: #0000ff;">if</span> (<span style="color: #0000ff;">typeof</span> prop === <span style="color: #800000;">'</span><span style="color: #800000;">object</span><span style="color: #800000;">'</span><span style="color: #000000;">) {
+      obj[i] </span>= (prop.constructor === Array) ?<span style="color: #000000;"> [] : {};            
+      arguments.callee(prop, obj[i]);
+    } </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+      obj[i] </span>=<span style="color: #000000;"> prop;
+    }
+  }    
+  </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> obj;
+}
+</span><span style="color: #0000ff;">var</span> str =<span style="color: #000000;"> {};
+</span><span style="color: #0000ff;">var</span> obj = { a: {a: <span style="color: #800000;">"</span><span style="color: #800000;">hello</span><span style="color: #800000;">"</span>, b: <span style="color: #800080;">21</span><span style="color: #000000;">} };
+deepClone(obj, str);
+console.log(str.a);</span></pre>
+</div>
+<p><strong>5、使用Object.create()方法</strong></p>
+<p>直接使用var newObj = Object.create(oldObj)，可以达到深拷贝的效果。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">function deepClone(initalObj, finalObj) {    
+  </span><span style="color: #0000ff;">var</span> obj = finalObj ||<span style="color: #000000;"> {};    
+  </span><span style="color: #0000ff;">for</span> (<span style="color: #0000ff;">var</span> i <span style="color: #0000ff;">in</span><span style="color: #000000;"> initalObj) {        
+    </span><span style="color: #0000ff;">var</span> prop = initalObj[i];        <span style="color: #008000;">//</span><span style="color: #008000;"> 避免相互引用对象导致死循环，如initalObj.a = initalObj的情况</span>
+    <span style="color: #0000ff;">if</span>(prop ===<span style="color: #000000;"> obj) {            
+      </span><span style="color: #0000ff;">continue</span><span style="color: #000000;">;
+    }        
+    </span><span style="color: #0000ff;">if</span> (<span style="color: #0000ff;">typeof</span> prop === <span style="color: #800000;">'</span><span style="color: #800000;">object</span><span style="color: #800000;">'</span><span style="color: #000000;">) {
+      obj[i] </span>= (prop.constructor === Array) ?<span style="color: #000000;"> [] : Object.create(prop);
+    } </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+      obj[i] </span>=<span style="color: #000000;"> prop;
+    }
+  }    
+  </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> obj;
+}</span></pre>
+</div>
+<p><strong>6、jquery</strong></p>
+<p>jquery&nbsp;有提供一个<code>$.extend</code>可以用来做&nbsp;Deep Copy。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">var</span> $ = require(<span style="color: #800000;">'</span><span style="color: #800000;">jquery</span><span style="color: #800000;">'</span><span style="color: #000000;">);
+</span><span style="color: #0000ff;">var</span> obj1 =<span style="color: #000000;"> {
+    a: </span><span style="color: #800080;">1</span><span style="color: #000000;">,
+    b: { f: { g: </span><span style="color: #800080;">1</span><span style="color: #000000;"> } },
+    c: [</span><span style="color: #800080;">1</span>, <span style="color: #800080;">2</span>, <span style="color: #800080;">3</span><span style="color: #000000;">]
+};
+</span><span style="color: #0000ff;">var</span> obj2 = $.extend(<span style="color: #0000ff;">true</span><span style="color: #000000;">, {}, obj1);
+console.log(obj1.b.f </span>===<span style="color: #000000;"> obj2.b.f);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> false</span></pre>
+</div>
+<p><strong>7、lodash</strong></p>
+<p>另外一个很热门的函数库lodash，也有提供<code>_.cloneDeep</code>用来做&nbsp;Deep Copy。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">var</span> _ = require(<span style="color: #800000;">'</span><span style="color: #800000;">lodash</span><span style="color: #800000;">'</span><span style="color: #000000;">);
+</span><span style="color: #0000ff;">var</span> obj1 =<span style="color: #000000;"> {
+    a: </span><span style="color: #800080;">1</span><span style="color: #000000;">,
+    b: { f: { g: </span><span style="color: #800080;">1</span><span style="color: #000000;"> } },
+    c: [</span><span style="color: #800080;">1</span>, <span style="color: #800080;">2</span>, <span style="color: #800080;">3</span><span style="color: #000000;">]
+};
+</span><span style="color: #0000ff;">var</span> obj2 =<span style="color: #000000;"> _.cloneDeep(obj1);
+console.log(obj1.b.f </span>===<span style="color: #000000;"> obj2.b.f);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> false</span></pre>
+</div>
+<p>这个性能还不错，使用起来也很简单。</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>参考：</p>
+<p><a href="http://www.dengzhr.com/js/1180" target="_blank">JavaScript 中对象的深拷贝</a></p>
+<p id="activity-name" class="rich_media_title"><a href="https://mp.weixin.qq.com/s/FFp56h9MnMKK4OM0BjDd1Q" target="_blank">关于 JS 中的浅拷贝和深拷贝</a></p>
+<p>&nbsp;</p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info">
+</div>
+<div class="clear"></div>
+<div id="post_next_prev"></div>
+</div>
+
+
+		</div>
+		<div class = "postDesc">posted @ <span id="post-date">2016-12-24 14:58</span> <a href='https://www.cnblogs.com/Chen-XiaoJun/'>chenxj</a> 阅读(<span id="post_view_count">...</span>) 评论(<span id="post_comment_count">...</span>)  <a href ="https://i.cnblogs.com/EditPosts.aspx?postid=6217373" rel="nofollow">编辑</a> <a href="#" onclick="AddToWz(6217373);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=298457,cb_entryId=6217373,cb_blogApp=currentBlogApp,cb_blogUserGuid='19635191-a15c-e611-9fc1-ac853d9f53cc',cb_entryCreatedDate='2016/12/24 14:58:00';loadViewCount(cb_entryId);var cb_postType=1;var isMarkdown=false;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id='comment_form' class='commentform'>
+<a name='commentform'></a>
+<div id='divCommentShow'></div>
+<div id='comment_nav'><span id='span_refresh_tips'></span><a href='javascript:void(0);' onclick='return RefreshCommentList();' id='lnk_RefreshComments' runat='server' clientidmode='Static'>刷新评论</a><a href='#' onclick='return RefreshPage();'>刷新页面</a><a href='#top'>返回顶部</a></div>
+<div id='comment_form_container'></div>
+<div class='ad_text_commentbox' id='ad_text_under_commentbox'></div>
+<div id='ad_t2'></div>
+<div id='opt_under_post'></div>
+<script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+<script>
+  googletag.cmd.push(function() {
+        googletag.defineSlot('/1090369/C1', [300, 250], 'div-gpt-ad-1546353474406-0').addService(googletag.pubads());
+        googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+  });
+</script>
+<div id='cnblogs_c1' class='c_ad_block'>
+    <div id='div-gpt-ad-1546353474406-0' style='height:250px; width:300px;'></div>
+</div>
+<div id='under_post_news'></div>
+<div id='cnblogs_c2' class='c_ad_block'>
+    <div id='div-gpt-ad-1539008685004-0' style='height:60px; width:468px;'></div>
+</div>
+<div id='under_post_kb'></div>
+<div id='HistoryToday' class='c_ad_block'></div>
+<script type='text/javascript'>
+ if(enablePostBottom()) {
+    codeHighlight();
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverT2();
+    deliverC1();
+    deliverC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);  
+}
+</script>
+</div>
+
+    
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright &copy;2019 chenxj
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+</body>
+</html>
